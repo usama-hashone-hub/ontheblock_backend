@@ -1,0 +1,13 @@
+module.exports.Token = require('./token.model');
+module.exports.User = require('./user.model');
+module.exports.File = require('./file.model');
+module.exports.Property = require('./property.model');
+module.exports.Message = require('./message.model');
+module.exports.Room = require('./room.model');
+module.exports.Category = require('./category.model');
+module.exports.Goal = require('./goal.model');
+module.exports.PropertyType = require('./propertyType.model');
+module.exports.Inventory = require('./inventory.model');
+module.exports.Folder = require('./folder.model');
+module.exports.Handyman = require('./handyman.model');
+module.exports.Task = require('./task.model');
