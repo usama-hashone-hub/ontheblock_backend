@@ -1,5 +1,14 @@
 const allRoles = {
-  user: ['verifyPhone', 'verifyEmail', 'getMyProfile', 'updateProfile', 'manageProducts', 'manageAds', 'createOrder'],
+  user: [
+    'verifyPhone',
+    'verifyEmail',
+    'getMyProfile',
+    'updateProfile',
+    'manageProducts',
+    'manageAds',
+    'createOrder',
+    'getProfile',
+  ],
   admin: [
     'getMyProfile',
     'updateProfile',

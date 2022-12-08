@@ -9,6 +9,7 @@ const {
 const pick = require('../../utils/pick');
 const moment = require('moment');
 const { Inventory } = require('../../models');
+const { checkUser } = require('../../utils/GraphqlAuth');
 
 const doc = async (user) => {
   return { ...user._doc };
@@ -16,9 +17,12 @@ const doc = async (user) => {
 
 const authResolver = {
   Query: {
-    profile: async (_, args, { req, res }) => {
-      const user = await userService.getUserById(req.userId);
-      return await doc(user);
+    profile: async (_, args, context) => {
+      await checkUser(context, 'getProfile');
+      return context.user;
+      // console.log(context);
+      // const user = await userService.getUserById(context._id);
+      // return await doc(user);
     },
     getInventoryByCategory: async (_, args, context) => {
       let data = await Inventory.aggregate([
