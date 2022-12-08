@@ -57,12 +57,15 @@ const updateUserById = async (userId, updateBody) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  }
-  Object.assign(user, updateBody);
-  await user.save();
-  return user;
+
+  return User.findByIdAndUpdate(userId, updateBody, { new: true });
+
+  // if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  // }
+  // Object.assign(user, updateBody);
+  // await user.save();
+  // return user;
 };
 
 /**

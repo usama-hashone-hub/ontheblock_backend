@@ -99,11 +99,12 @@ const authResolver = {
       const token = await tokenService.generateAuthTokens(user, true);
       return { ...(await doc(user)), ...token };
     },
-    updateUser: async (_, args, { req, res }) => {
-      if (!req.isAuth) {
+    updateUser: async (_, args, context) => {
+      await checkUser(context, 'updateProfile');
+      if (!context.user) {
         throw new Error('Unauthenticated!');
       }
-      let user = await userService.updateUserById(req.userId, args);
+      let user = await userService.updateUserById(context.user._id, args.updateUserInput);
       return await doc(user);
     },
     verifyPhone: async (_, { code, phone }, context) => {
