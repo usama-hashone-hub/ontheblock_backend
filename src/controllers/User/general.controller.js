@@ -3,6 +3,7 @@ const pick = require('../../utils/pick');
 const ApiError = require('../../utils/ApiError');
 const catchAsync = require('../../utils/catchAsync');
 const { userService, generalService, productService } = require('../../services');
+const { getPath } = require('../../utils/cloudinary');
 
 const addFav = catchAsync(async (req, res) => {
   const fav = await generalService.addFav(req.user, req.query.productId);
@@ -37,4 +38,10 @@ const postSearch = catchAsync(async (req, res) => {
   res.send(products);
 });
 
-module.exports = { queryFavs, delFav, addFav, report, blockUser, postSearch };
+const uploadImages = catchAsync(async (req, res) => {
+  let images = [];
+  if (req.files?.images) images = await getPath(req.files?.images);
+  res.status(httpStatus.OK).send({ images });
+});
+
+module.exports = { queryFavs, delFav, addFav, report, blockUser, postSearch, uploadImages };

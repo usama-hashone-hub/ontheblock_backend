@@ -11,6 +11,7 @@ const {
   rentController,
 } = require('../../controllers');
 const { productValidation, adValidation, generalValidation, rentValidation } = require('../../validations');
+const { uploadImage } = require('../../utils/cloudinary');
 
 const router = express.Router();
 
@@ -32,6 +33,8 @@ router
   .get(can('favs'), generalController.queryFavs)
   .post(can('favs'), validate(generalValidation.addFav), generalController.addFav)
   .delete(can('favs'), validate(generalValidation.delFav), generalController.delFav);
+
+router.route('/upload').post(uploadImage, generalController.uploadImages);
 
 // router.route('/rent').post(can('getInRent'), validate(rentValidation.createRent), rentController.createRent);
 //
