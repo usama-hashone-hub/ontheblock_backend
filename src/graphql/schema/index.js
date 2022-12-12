@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server');
+const { gql } = require('apollo-server-express');
 const typeDefs = gql`
   scalar GraphQLDateTime
   scalar GraphQLDate
@@ -207,68 +207,6 @@ const typeDefs = gql`
 
   input propertyTypefilters {
     name: String
-    createdAt: GraphQLDateTime
-    updatedAt: GraphQLDateTime
-  }
-
-  # =========================================================================
-  # Property type and inputs
-  # =========================================================================
-
-  type Property {
-    _id: ID!
-    name: String
-    description: String
-    images: [String]
-    type: PropertyType
-    bedrooms: Int
-    bathrooms: Int
-    owned_years: Int
-    address: String
-    city: String
-    country: String
-    zip_code: String
-    is_active: Boolean
-    added_by: User
-    createdAt: GraphQLDateTime
-    updatedAt: GraphQLDateTime
-  }
-
-  type propertiesList {
-    results: [Property]
-    page: Int
-    limit: Int
-    totalPages: Int
-    totalResults: Int
-  }
-
-  input InputProperty {
-    name: String
-    description: String
-    images: [String]
-    type: ID
-    bedrooms: Int
-    bathrooms: Int
-    owned_years: Int
-    address: String
-    city: String
-    country: String
-    zip_code: String
-    is_active: Boolean
-  }
-
-  input DeletePropertyInput {
-    id: ID
-  }
-
-  input propertyfilters {
-    name: String
-    bedrooms: Int
-    bathrooms: Int
-    owned_years: Int
-    city: String
-    country: String
-    zip_code: String
     createdAt: GraphQLDateTime
     updatedAt: GraphQLDateTime
   }

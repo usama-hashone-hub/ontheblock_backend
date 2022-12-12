@@ -3,6 +3,7 @@ const { app, http } = require('./app');
 const config = require('./config/config');
 const logger = require('./config/logger');
 const AWS = require('aws-sdk');
+// const { ApolloServer } = require('apollo-server-express');
 const { ApolloServer } = require('apollo-server');
 const typeDefs = require('./graphql/schema/index');
 const resolvers = require('./graphql/resolvers/index');
@@ -35,7 +36,7 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   //   }
   // );
 });
-
+// async function apolloServer(app) {
 const graphqlServer = new ApolloServer({
   typeDefs,
   resolvers,
@@ -43,7 +44,7 @@ const graphqlServer = new ApolloServer({
     // Get the user token from the headers.
     const token = req.headers.authorization || '';
 
-    // Try to retrieve a user with the token
+    // Try to retrieve a user with the tokenx
     const { user } = await getPayload(token);
 
     // add the user to the context
@@ -51,7 +52,12 @@ const graphqlServer = new ApolloServer({
   },
 });
 
-graphqlServer.listen({ port: config.grahqlPort }).then(({ url }) => {
+//   await graphqlServer.start();
+//   graphqlServer.applyMiddleware({ app });
+// }
+// apolloServer(app);
+
+graphqlServer.listen({ port: config.grahqlPort, url: '/graphql' }).then(({ url }) => {
   logger.info(`Connected to GraphQl ${url}`);
 });
 
