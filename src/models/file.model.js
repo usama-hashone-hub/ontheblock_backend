@@ -1,6 +1,7 @@
 const { required } = require('joi');
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { toJSON, paginate } = require('./plugins');
 
 const fileSchema = mongoose.Schema(
   {
@@ -27,6 +28,10 @@ const fileSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+fileSchema.plugin(toJSON);
+fileSchema.plugin(paginate);
+
 const File = mongoose.model('File', fileSchema);
 
 module.exports = File;
