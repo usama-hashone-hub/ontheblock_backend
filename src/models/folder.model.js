@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { toJSON, paginate } = require('./plugins');
 
 const folderSchema = mongoose.Schema(
   {
@@ -33,6 +34,9 @@ folderSchema.pre('find', function (next) {
   this.populate('added_by');
   next();
 });
+
+folderSchema.plugin(toJSON);
+folderSchema.plugin(paginate);
 
 const Folder = mongoose.model('Folder', folderSchema);
 

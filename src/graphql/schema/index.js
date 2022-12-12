@@ -340,7 +340,7 @@ const typeDefs = gql`
   type Folder {
     _id: ID!
     name: String
-    files: [String]
+    files: [File]
     inventory: Inventory
     added_by: User
     createdAt: GraphQLDateTime

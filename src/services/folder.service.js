@@ -7,8 +7,8 @@ const createFolder = async (body) => {
 };
 
 const queryFolders = async (filter, options) => {
-  const properties = await Folder.paginate(filter, options);
-  return properties;
+  const folders = await Folder.paginate(filter, options);
+  return folders;
 };
 
 const getFolderById = async (id) => {
