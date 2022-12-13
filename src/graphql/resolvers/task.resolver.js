@@ -2,6 +2,7 @@ const { taskService } = require('../../services');
 const pick = require('../../utils/pick');
 const moment = require('moment');
 const { Task } = require('../../models');
+const mongoose = require('mongoose');
 
 const doc = async (document) => {
   return { ...document._doc };
@@ -43,7 +44,7 @@ const taskResolver = {
           },
           {
             $match: {
-              added_by: args.userId,
+              added_by: mongoose.Types.ObjectId(args.userId),
               month: args.month,
             },
           },

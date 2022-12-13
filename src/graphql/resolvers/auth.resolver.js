@@ -11,6 +11,7 @@ const moment = require('moment');
 const { Inventory } = require('../../models');
 const { checkUser } = require('../../utils/GraphqlAuth');
 const ImageKit = require('imagekit');
+const mongoose = require('mongoose');
 
 const doc = async (user) => {
   return { ...user._doc };
@@ -27,12 +28,13 @@ const authResolver = {
     },
     getInventoryByCategory: async (_, args, context) => {
       await checkUser(context, 'getInventoryByCategory');
+      console.log(context.user._id, args.propertyId);
 
       let data = await Inventory.aggregate([
         {
           $match: {
-            property: args.propertyId,
-            added_by: context.user._id,
+            property: mongoose.Types.ObjectId(args.propertyId),
+            added_by: mongoose.Types.ObjectId(context.user._id),
           },
         },
         {

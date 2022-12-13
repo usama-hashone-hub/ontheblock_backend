@@ -326,6 +326,7 @@ const typeDefs = gql`
     brand: String
     model_no: String
     serail_no: String
+    property: ID
     is_active: Boolean
     type: ID
     added_by: ID

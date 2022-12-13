@@ -16,6 +16,7 @@ const inventoryResolver = {
         'model_no',
         'serail_no',
         'is_active',
+        'property',
         'type',
         'added_by',
       ]);
