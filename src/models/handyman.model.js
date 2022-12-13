@@ -1,6 +1,7 @@
 const { required } = require('joi');
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { toJSON, paginate } = require('./plugins');
 
 const handymanSchema = mongoose.Schema(
   {
@@ -31,6 +32,9 @@ handymanSchema.pre('find', function (next) {
   this.populate('property');
   next();
 });
+
+handymanSchema.plugin(toJSON);
+handymanSchema.plugin(paginate);
 
 const Hamdyman = mongoose.model('Hamdyman', handymanSchema);
 

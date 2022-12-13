@@ -8,6 +8,7 @@ const allRoles = {
     'manageAds',
     'createOrder',
     'getProfile',
+    'getInventoryByCategory',
   ],
   admin: [
     'getMyProfile',

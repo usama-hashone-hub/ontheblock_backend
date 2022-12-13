@@ -4,6 +4,7 @@ const ApiError = require('../../utils/ApiError');
 const catchAsync = require('../../utils/catchAsync');
 const { userService, generalService, productService } = require('../../services');
 const { getPath } = require('../../utils/cloudinary');
+const ImageKit = require('imagekit');
 
 const addFav = catchAsync(async (req, res) => {
   const fav = await generalService.addFav(req.user, req.query.productId);
@@ -44,4 +45,17 @@ const uploadImages = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ images });
 });
 
-module.exports = { queryFavs, delFav, addFav, report, blockUser, postSearch, uploadImages };
+const getImageKitToken = catchAsync(async (req, res) => {
+  var imagekit = new ImageKit({
+    publicKey: 'public_lcWRjS1cr6PRFyBDhUN4CBcXNP4=',
+    privateKey: 'private_LeONgoBvVCzYQm1kq0GlnvowS58=',
+    urlEndpoint: 'https://ik.imagekit.io/6itqidsrz',
+  });
+
+  var authenticationParameters = imagekit.getAuthenticationParameters();
+  console.log(authenticationParameters);
+
+  res.status(httpStatus.OK).send({ authenticationParameters });
+});
+
+module.exports = { queryFavs, delFav, addFav, report, blockUser, postSearch, uploadImages, getImageKitToken };

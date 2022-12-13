@@ -512,6 +512,12 @@ const typeDefs = gql`
     category: Category
   }
 
+  type getImageKitToken {
+    token: String
+    expire: String
+    signature: String
+  }
+
   type Query {
     # getAllRiders: [User]
     # settings: [Setting]
@@ -527,7 +533,8 @@ const typeDefs = gql`
     tasks(filters: Taskfilters, options: options): TasksList!
     monthlyTasksList(userId: ID!, month: String!): [Task]
     upcommingTasksList(filters: Taskfilters, options: options): TasksList!
-    getInventoryByCategory: [InventoryGroupByCategory]
+    getInventoryByCategory(propertyId: ID!): [InventoryGroupByCategory]
+    getImageKitToken: getImageKitToken
     # estates: [Estate]
     # customEstatesList: [Estate]
     # products: [Product]

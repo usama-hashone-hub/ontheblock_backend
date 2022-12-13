@@ -10,6 +10,7 @@ const pick = require('../../utils/pick');
 const moment = require('moment');
 const { Inventory } = require('../../models');
 const { checkUser } = require('../../utils/GraphqlAuth');
+const ImageKit = require('imagekit');
 
 const doc = async (user) => {
   return { ...user._doc };
@@ -25,7 +26,15 @@ const authResolver = {
       // return await doc(user);
     },
     getInventoryByCategory: async (_, args, context) => {
+      await checkUser(context, 'getInventoryByCategory');
+
       let data = await Inventory.aggregate([
+        {
+          $match: {
+            property: args.propertyId,
+            added_by: context.user._id,
+          },
+        },
         {
           $group: {
             _id: '$type',
@@ -80,6 +89,16 @@ const authResolver = {
       ]);
       const options = pick(args.options, ['sortBy', 'limit', 'page']);
       return await userService.queryUsers(filter, options);
+    },
+    getImageKitToken: async (_, args, context) => {
+      var imagekit = new ImageKit({
+        publicKey: 'public_lcWRjS1cr6PRFyBDhUN4CBcXNP4=',
+        privateKey: 'private_LeONgoBvVCzYQm1kq0GlnvowS58=',
+        urlEndpoint: 'https://ik.imagekit.io/6itqidsrz',
+      });
+
+      var authenticationParameters = imagekit.getAuthenticationParameters();
+      return authenticationParameters;
     },
   },
   Mutation: {

@@ -35,6 +35,7 @@ router
   .delete(can('favs'), validate(generalValidation.delFav), generalController.delFav);
 
 router.route('/upload').post(uploadImage, generalController.uploadImages);
+router.route('/getToken').get(generalController.getImageKitToken);
 
 // router.route('/rent').post(can('getInRent'), validate(rentValidation.createRent), rentController.createRent);
 //
