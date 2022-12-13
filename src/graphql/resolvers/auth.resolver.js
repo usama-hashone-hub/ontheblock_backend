@@ -92,9 +92,9 @@ const authResolver = {
     },
     getImageKitToken: async (_, args, context) => {
       var imagekit = new ImageKit({
-        publicKey: 'public_4QQW8bNMH7pSZAW+hvf5CXdjXn8=',
-        privateKey: 'private_kNAgJDeK61znBZUzQJshnGTLrsg=',
-        urlEndpoint: 'https://ik.imagekit.io/4eplbj78t',
+        publicKey: 'public_9oA6a9dbCTuAWI1qrlnQcdi2h/U=',
+        privateKey: 'private_uI05KYEBY48GyrXEh8UKe+CY5s8=',
+        urlEndpoint: 'https://ik.imagekit.io/ak4gva2wf',
       });
 
       var authenticationParameters = imagekit.getAuthenticationParameters();
