@@ -20,7 +20,11 @@ const updateTaskById = async (productId, updateBody) => {
   if (!Prod) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Task not found');
   }
-  return Task.findByIdAndUpdate(productId, updateBody, { new: true });
+  return Task.findByIdAndUpdate(productId, updateBody, { new: true })
+    .populate('property')
+    .populate('assign_to')
+    .populate('added_by')
+    .populate('inventory');
 };
 
 const deleteTaskById = async (productId) => {

@@ -10,10 +10,10 @@ const sendPushNotifications = async (expoPushMessages) => {
        * service instead, which will later send the notifications to the users
        * (yes, Expo might fail to send it, but usually doesn't happen) */
 
-      functions.logger.log('Push notifications requested correctly');
+      console.log('Push notifications requested correctly');
     })
     .catch((error) => {
-      functions.logger.error(`Error requesting push notifications`, error);
+      console.error(`Error requesting push notifications`, error);
     });
 };
 
@@ -22,10 +22,11 @@ const sendTestNotification = () => {
   expo
     .sendPushNotificationsAsync([
       {
-        title: 'test notification from backend server ',
+        title: 'test notification from backend server ==============================',
         body: 'Lorem ipsom',
         data: { id: 'sadfqwe23qwfwefasdasdasd' },
         to: 'ExponentPushToken[ZRas1CAIYszJIZrdjDfJjY]',
+        sound: 'default',
       },
     ])
     .then(() => {

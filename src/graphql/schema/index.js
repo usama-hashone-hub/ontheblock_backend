@@ -10,6 +10,7 @@ const typeDefs = gql`
     last_name: String
     phone: String
     email: String
+    address: String
     createdAt: GraphQLDateTime
     updatedAt: GraphQLDateTime
     notificationToken: String
@@ -496,6 +497,7 @@ const typeDefs = gql`
   }
 
   input Taskfilters {
+    _id: ID
     schedule_date: GraphQLDate
     is_completed: Boolean
     inventory: ID

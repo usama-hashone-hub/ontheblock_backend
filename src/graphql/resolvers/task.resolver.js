@@ -12,6 +12,7 @@ const taskResolver = {
   Query: {
     tasks: async (_, args, { req, res }) => {
       const filter = pick(args.filters, [
+        '_id',
         'schedule_date',
         'is_completed',
         'inventory',
