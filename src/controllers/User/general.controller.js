@@ -55,7 +55,7 @@ const getImageKitToken = catchAsync(async (req, res) => {
   var authenticationParameters = imagekit.getAuthenticationParameters();
   console.log(authenticationParameters);
 
-  res.status(httpStatus.OK).send({ authenticationParameters });
+  res.status(httpStatus.OK).send({ ...authenticationParameters });
 });
 
 module.exports = { queryFavs, delFav, addFav, report, blockUser, postSearch, uploadImages, getImageKitToken };
