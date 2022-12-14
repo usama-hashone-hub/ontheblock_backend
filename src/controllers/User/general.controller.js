@@ -47,9 +47,9 @@ const uploadImages = catchAsync(async (req, res) => {
 
 const getImageKitToken = catchAsync(async (req, res) => {
   var imagekit = new ImageKit({
-    publicKey: 'public_lcWRjS1cr6PRFyBDhUN4CBcXNP4=',
-    privateKey: 'private_LeONgoBvVCzYQm1kq0GlnvowS58=',
-    urlEndpoint: 'https://ik.imagekit.io/6itqidsrz',
+    publicKey: 'public_9oA6a9dbCTuAWI1qrlnQcdi2h/U=',
+    privateKey: 'private_uI05KYEBY48GyrXEh8UKe+CY5s8=',
+    urlEndpoint: 'https://ik.imagekit.io/ak4gva2wf',
   });
 
   var authenticationParameters = imagekit.getAuthenticationParameters();

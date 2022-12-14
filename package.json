@@ -49,6 +49,7 @@
     "prettier"
   ],
   "dependencies": {
+    "apollo-datasource-rest": "^3.7.0",
     "apollo-server": "^3.11.1",
     "apollo-server-express": "^3.11.1",
     "aws-sdk": "^2.1230.0",

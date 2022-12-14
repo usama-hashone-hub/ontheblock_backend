@@ -2487,6 +2487,17 @@
     "normalize-path" "^3.0.0"
     "picomatch" "^2.0.4"
 
+"apollo-datasource-rest@^3.7.0":
+  "integrity" "sha512-MeORtXZtc9drAvsarAGAUI4GZKoYFVc1OXIvehIZ/6pJrOdKGziGbraos2s/A+u8mpNPfbpk7W6f7uKtmwV0AA=="
+  "resolved" "https://registry.npmjs.org/apollo-datasource-rest/-/apollo-datasource-rest-3.7.0.tgz"
+  "version" "3.7.0"
+  dependencies:
+    "@apollo/utils.keyvaluecache" "^1.0.1"
+    "apollo-datasource" "^3.3.2"
+    "apollo-server-env" "^4.2.1"
+    "apollo-server-errors" "^3.3.1"
+    "http-cache-semantics" "^4.1.0"
+
 "apollo-datasource@^3.3.2":
   "integrity" "sha512-L5TiS8E2Hn/Yz7SSnWIVbZw0ZfEIXZCa5VUiVxD9P53JvSrf4aStvsFDlGWPvpIdCR+aly2CfoB79B9/JjKFqg=="
   "resolved" "https://registry.npmjs.org/apollo-datasource/-/apollo-datasource-3.3.2.tgz"
@@ -5376,7 +5387,7 @@
   "resolved" "https://registry.npmjs.org/html-escaper/-/html-escaper-2.0.2.tgz"
   "version" "2.0.2"
 
-"http-cache-semantics@^4.0.0":
+"http-cache-semantics@^4.0.0", "http-cache-semantics@^4.1.0":
   "integrity" "sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ=="
   "resolved" "https://registry.npmjs.org/http-cache-semantics/-/http-cache-semantics-4.1.0.tgz"
   "version" "4.1.0"
