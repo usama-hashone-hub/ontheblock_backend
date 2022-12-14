@@ -78,7 +78,7 @@ app.get('/', (req, res, next) => {
   res.send({ message: 'Welcome to youhook APIs' });
 });
 
-// sendTaskNotification.start();
+sendTaskNotificationUsingExpo.start();
 // sendTestNotification();
 // v1 api routes
 app.use('/v1', routes);

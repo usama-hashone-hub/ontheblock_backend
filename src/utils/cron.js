@@ -48,15 +48,24 @@ const sendTaskNotificationUsingExpo = cron.schedule('* 12 * * *', async () => {
     .populate('added_by');
 
   let pushMessages = tasks.reduce((acc, curr) => {
-    acc.push({
-      title: 'Upcomming Task',
-      body: 'You notifictaion is about to be there',
-      imageUrl: 'image.png',
-      data: {
-        id: curr._id,
-      },
-      to: curr.added_by.notificationToken,
-    });
+    let daysRemaning = moment(curr.schedule_date.diff(curDate, 'days'));
+
+    let OneWeekRemaining = daysRemaning == 7 ? true : false;
+    let ThreeDaysRemaining = daysRemaning == 3 ? true : false;
+    let OneDayRemaining = daysRemaning == 1 ? true : false;
+    let TwelveHoursRemaining = daysRemaning == 0 ? true : false;
+
+    if (OneWeekRemaining || ThreeDaysRemaining || OneDayRemaining || TwelveHoursRemaining) {
+      acc.push({
+        title: `Upcomming Task within ${daysRemaning} days`,
+        body: curr.description,
+        data: {
+          id: curr._id,
+        },
+        to: curr.added_by.notificationToken,
+      });
+    }
+
     return acc;
   }, []);
 
