@@ -20,7 +20,7 @@ const updateFolderById = async (productId, updateBody) => {
   if (!Prod) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Folder not found');
   }
-  return Folder.findByIdAndUpdate(productId, updateBody, { new: true });
+  return Folder.findByIdAndUpdate(productId, updateBody, { new: true }).populate('files');
 };
 
 const deleteFolderById = async (productId) => {

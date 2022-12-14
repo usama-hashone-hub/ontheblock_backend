@@ -414,6 +414,11 @@ const typeDefs = gql`
     updatedAt: GraphQLDateTime
   }
 
+  input InputMultipleFiles {
+    files: [InputFile]
+    deletedFiles: [ID]
+  }
+
   # =========================================================================
   # Handyman type and inputs
   # =========================================================================
@@ -599,6 +604,7 @@ const typeDefs = gql`
     addFile(folderId: ID!, inputFile: InputFile): File
     deleteFile(deleteFileInput: DeleteFileInput): File
     updateFile(id: ID!, updateFileInput: InputFile): File
+    addMultipleFiles(folderId: ID!, InputMultipleFiles: InputMultipleFiles): Folder
 
     addHandyman(inputHandyman: InputHandyman): Handyman
     deleteHandyman(deleteHandymanInput: DeleteHandymanInput): Handyman

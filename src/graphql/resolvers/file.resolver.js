@@ -1,3 +1,4 @@
+const { File } = require('../../models');
 const { fileService, folderService } = require('../../services');
 const pick = require('../../utils/pick');
 
@@ -26,6 +27,37 @@ const fileResolver = {
     },
     updateFile: async (_, args, context) => {
       return await doc(await fileService.updateFileById(args.id, args.updateFileInput));
+    },
+    addMultipleFiles: async (_, args, context) => {
+      let inputFiles = args.InputMultipleFiles?.files ?? [];
+      let deleteFiles = args.InputMultipleFiles.deletedFiles;
+      let folder = await folderService.getFolderById(args.folderId);
+
+      let remainingFiles = [];
+      if (deleteFiles) {
+        remainingFiles = folder.files.filter((file) => !deleteFiles.includes(file.toString()));
+        console.log(remainingFiles);
+      } else {
+        remainingFiles = folder.files;
+      }
+
+      const uploadfiles = inputFiles.map(async (file) => {
+        return await fileService.createFile({
+          name: file.name,
+          path: file.path,
+          mimetype: file.mimetype,
+        });
+      });
+
+      let attachFilesToFoler = [];
+
+      return await Promise.all(uploadfiles).then(async (files) => {
+        let Newfiles = files.map((file) => file._id);
+
+        attachFilesToFoler = [...Newfiles, ...remainingFiles];
+        // console.log(attachFilesToFoler);
+        return await folderService.updateFolderById(args.folderId, { files: attachFilesToFoler });
+      });
     },
   },
 };
