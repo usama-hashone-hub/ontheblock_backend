@@ -3,7 +3,7 @@ const { Task } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createTask = async (body) => {
-  return Task.create(body).populate('property');
+  return Task.create(body);
 };
 
 const queryTasks = async (filter, options) => {
