@@ -24,8 +24,9 @@ const { Room, Message } = require('./models');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const can = require('./middlewares/auth');
-const { sendTaskNotification } = require('./utils/cron');
+const { sendTaskNotificationUsingExpo } = require('./utils/cron');
 const { sendFireBAseNotifications } = require('./utils/firebaseNotifications');
+const { sendTestNotification } = require('./utils/expoNotifications');
 
 const app = express();
 const http = require('http').Server(app);
@@ -86,150 +87,150 @@ app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
 
-io.on('connection', (socket) => {
-  console.log('connected');
+// io.on('connection', (socket) => {
+//   console.log('connected');
 
-  socket.on('join', async (data) => {
-    const { authId } = data;
-    console.log('====================== JOIN ===================');
-    await userService.updateUserById(authId, {
-      socketId: socket.id,
-      isOnline: true,
-    });
-  });
+//   socket.on('join', async (data) => {
+//     const { authId } = data;
+//     console.log('====================== JOIN ===================');
+//     await userService.updateUserById(authId, {
+//       socketId: socket.id,
+//       isOnline: true,
+//     });
+//   });
 
-  socket.on('createRoom', async (data) => {
-    const { room } = data;
-    console.log('====================== CREATE JOIN ===================');
-    await roomService.createRoom(room);
-  });
+//   socket.on('createRoom', async (data) => {
+//     const { room } = data;
+//     console.log('====================== CREATE JOIN ===================');
+//     await roomService.createRoom(room);
+//   });
 
-  getRoomMessages = async (data) => {
-    const { roomId, authId, joinRoom } = data;
-    console.log('====================== GET MESSAGE ===================');
+//   getRoomMessages = async (data) => {
+//     const { roomId, authId, joinRoom } = data;
+//     console.log('====================== GET MESSAGE ===================');
 
-    const options = pick(data, ['sortBy', 'limit', 'page']);
+//     const options = pick(data, ['sortBy', 'limit', 'page']);
 
-    if (joinRoom == true) {
-      const messages = await messageService.queryMessages({ room: roomId }, options);
+//     if (joinRoom == true) {
+//       const messages = await messageService.queryMessages({ room: roomId }, options);
 
-      const messageIds = messages.results.map((msg) => msg.id);
+//       const messageIds = messages.results.map((msg) => msg.id);
 
-      // Updateding messages seenBy array aacording to authId
-      await Message.updateMany(
-        { _id: { $in: messageIds }, to: { $in: [authId] }, status: { $ne: 'readed' } },
-        { $addToSet: { seenBy: authId } }
-      );
+//       // Updateding messages seenBy array aacording to authId
+//       await Message.updateMany(
+//         { _id: { $in: messageIds }, to: { $in: [authId] }, status: { $ne: 'readed' } },
+//         { $addToSet: { seenBy: authId } }
+//       );
 
-      //Updating msg status by comparing seenBy and user array
-      await Message.updateMany(
-        { _id: { $in: messageIds }, to: { $in: [authId] }, $expr: { $eq: [{ $size: '$to' }, { $size: '$seenBy' }] } },
-        { status: 'readed' }
-      );
-    }
+//       //Updating msg status by comparing seenBy and user array
+//       await Message.updateMany(
+//         { _id: { $in: messageIds }, to: { $in: [authId] }, $expr: { $eq: [{ $size: '$to' }, { $size: '$seenBy' }] } },
+//         { status: 'readed' }
+//       );
+//     }
 
-    const updatedMessages = await messageService.queryMessages({ room: roomId }, options);
-    io.emit(roomId, updatedMessages);
-  };
+//     const updatedMessages = await messageService.queryMessages({ room: roomId }, options);
+//     io.emit(roomId, updatedMessages);
+//   };
 
-  socket.on('getRoomMessages', async (data) => {
-    await getRoomMessages(data);
-  });
+//   socket.on('getRoomMessages', async (data) => {
+//     await getRoomMessages(data);
+//   });
 
-  socket.on('roomJoin', async (data) => {
-    const { roomId, authId } = data;
-    console.log('====================== ROOM JOIN ===================');
-    await roomService.updateRoomById(roomId, { $addToSet: { users: authId }, $addToSet: { connectedUsers: authId } });
-    socket.join(roomId);
+//   socket.on('roomJoin', async (data) => {
+//     const { roomId, authId } = data;
+//     console.log('====================== ROOM JOIN ===================');
+//     await roomService.updateRoomById(roomId, { $addToSet: { users: authId }, $addToSet: { connectedUsers: authId } });
+//     socket.join(roomId);
 
-    await getRoomMessages({ ...data, joinRoom: true });
-  });
+//     await getRoomMessages({ ...data, joinRoom: true });
+//   });
 
-  socket.on('sendMessage', async (data) => {
-    const { authId, roomId, message, messageType, files } = data;
-    console.log('====================== SEND MESSAGE ===================');
-    const room = await roomService.getRoomById(roomId);
-    const roomUsers = await roomService.getRoomByIdUserPopulated(roomId);
+//   socket.on('sendMessage', async (data) => {
+//     const { authId, roomId, message, messageType, files } = data;
+//     console.log('====================== SEND MESSAGE ===================');
+//     const room = await roomService.getRoomById(roomId);
+//     const roomUsers = await roomService.getRoomByIdUserPopulated(roomId);
 
-    if (!room.users.includes(authId)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot send message user is not in the room');
-    }
+//     if (!room.users.includes(authId)) {
+//       throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot send message user is not in the room');
+//     }
 
-    if (!room.connectedUsers.includes(authId)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'please join room before sending message');
-    }
+//     if (!room.connectedUsers.includes(authId)) {
+//       throw new ApiError(httpStatus.BAD_REQUEST, 'please join room before sending message');
+//     }
 
-    if (messageType == 'file') {
-      if (files?.length <= 0 || files == undefined) {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'messageType file must have atleast 1 file in files array');
-      }
-    }
+//     if (messageType == 'file') {
+//       if (files?.length <= 0 || files == undefined) {
+//         throw new ApiError(httpStatus.BAD_REQUEST, 'messageType file must have atleast 1 file in files array');
+//       }
+//     }
 
-    const m = await messageService.createMessage({
-      room: roomId,
-      type: messageType,
-      message: message,
-      from: authId,
-      files: messageType == 'text' ? [] : files,
-      to: room.users.filter((user) => user != authId),
-      seenBy: room.connectedUsers.filter((user) => user != authId),
-      status: room.connectedUsers.length == room.users.length ? 'readed' : 'delevired',
-    });
+//     const m = await messageService.createMessage({
+//       room: roomId,
+//       type: messageType,
+//       message: message,
+//       from: authId,
+//       files: messageType == 'text' ? [] : files,
+//       to: room.users.filter((user) => user != authId),
+//       seenBy: room.connectedUsers.filter((user) => user != authId),
+//       status: room.connectedUsers.length == room.users.length ? 'readed' : 'delevired',
+//     });
 
-    let updateRoom = { lastMessage: m._id };
+//     let updateRoom = { lastMessage: m._id };
 
-    if (!room.primeUser) {
-      updateRoom = { ...updateRoom, primeUser: room.users.filter((user) => user != authId).at(0) };
-    }
+//     if (!room.primeUser) {
+//       updateRoom = { ...updateRoom, primeUser: room.users.filter((user) => user != authId).at(0) };
+//     }
 
-    await roomService.updateRoomById(roomId, updateRoom);
+//     await roomService.updateRoomById(roomId, updateRoom);
 
-    await getRoomMessages(data);
+//     await getRoomMessages(data);
 
-    const tokens = roomUsers.users
-      .filter((user) => user._id != authId)
-      .reduce((acc, curr) => {
-        acc.push(...curr?.deviceTokens);
-        return acc;
-      }, []);
+//     const tokens = roomUsers.users
+//       .filter((user) => user._id != authId)
+//       .reduce((acc, curr) => {
+//         acc.push(...curr?.deviceTokens);
+//         return acc;
+//       }, []);
 
-    if (tokens.length > 0) {
-      let sender = await userService.getUserById(authId);
+//     if (tokens.length > 0) {
+//       let sender = await userService.getUserById(authId);
 
-      await sendFireBAseNotifications({
-        title: room?.chatName ? room?.chatName : roomUsers?.primeUser?.name,
-        body: message,
-        tokens,
-        imageUrl: 'image url',
-        notificationData: { roomId, name: sender.name, id: sender._id },
-      });
-    }
-  });
+//       await sendFireBAseNotifications({
+//         title: room?.chatName ? room?.chatName : roomUsers?.primeUser?.name,
+//         body: message,
+//         tokens,
+//         imageUrl: 'image url',
+//         notificationData: { roomId, name: sender.name, id: sender._id },
+//       });
+//     }
+//   });
 
-  socket.on('leaveRoom', async (data) => {
-    const { authId, roomId } = data;
-    console.log('====================== leaveRoom ===================');
-    await roomService.updateRoomById(roomId, { $pull: { connectedUsers: authId } });
-    socket.leave(roomId);
-  });
+//   socket.on('leaveRoom', async (data) => {
+//     const { authId, roomId } = data;
+//     console.log('====================== leaveRoom ===================');
+//     await roomService.updateRoomById(roomId, { $pull: { connectedUsers: authId } });
+//     socket.leave(roomId);
+//   });
 
-  socket.on('typing', async (data) => {
-    const { roomId, authId } = data;
-    console.log('====================== typing ===================');
-    const user = await userService.getUserById(authId);
-    io.emit('typing-' + roomId, { typing: true, message: user?.name + ' is Typing' });
-  });
+//   socket.on('typing', async (data) => {
+//     const { roomId, authId } = data;
+//     console.log('====================== typing ===================');
+//     const user = await userService.getUserById(authId);
+//     io.emit('typing-' + roomId, { typing: true, message: user?.name + ' is Typing' });
+//   });
 
-  socket.on('stopTyping', (data) => {
-    const { roomId } = data;
-    console.log('====================== stop Typing ===================');
-    io.emit('stopTyping-' + roomId, { typing: false });
-  });
+//   socket.on('stopTyping', (data) => {
+//     const { roomId } = data;
+//     console.log('====================== stop Typing ===================');
+//     io.emit('stopTyping-' + roomId, { typing: false });
+//   });
 
-  socket.on('disconnect', () => {
-    console.log('====================== DISCONNECT ===================');
-  });
-});
+//   socket.on('disconnect', () => {
+//     console.log('====================== DISCONNECT ===================');
+//   });
+// });
 
 // convert error to ApiError, if needed
 app.use(errorConverter);

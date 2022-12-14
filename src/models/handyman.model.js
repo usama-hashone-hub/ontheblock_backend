@@ -36,6 +36,6 @@ handymanSchema.pre('find', function (next) {
 handymanSchema.plugin(toJSON);
 handymanSchema.plugin(paginate);
 
-const Hamdyman = mongoose.model('Hamdyman', handymanSchema);
+const Handyman = mongoose.model('Handyman', handymanSchema);
 
-module.exports = Hamdyman;
+module.exports = Handyman;
