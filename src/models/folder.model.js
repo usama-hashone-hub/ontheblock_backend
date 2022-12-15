@@ -17,6 +17,10 @@ const folderSchema = mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Inventory',
     },
+    property: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Property',
+    },
     added_by: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
@@ -31,6 +35,7 @@ const folderSchema = mongoose.Schema(
 folderSchema.pre('find', function (next) {
   this.populate('files');
   this.populate('inventory');
+  this.populate('property');
   this.populate('added_by');
   next();
 });

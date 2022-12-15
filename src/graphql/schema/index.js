@@ -344,6 +344,7 @@ const typeDefs = gql`
     name: String
     files: [File]
     inventory: Inventory
+    property: Property
     added_by: User
     createdAt: GraphQLDateTime
     updatedAt: GraphQLDateTime
@@ -361,6 +362,7 @@ const typeDefs = gql`
     name: String
     files: [ID]
     inventory: ID
+    property: ID!
     added_by: ID
   }
 
@@ -371,6 +373,7 @@ const typeDefs = gql`
   input Folderfilters {
     name: String
     inventory: ID
+    property: ID
     added_by: ID
     createdAt: GraphQLDateTime
     updatedAt: GraphQLDateTime

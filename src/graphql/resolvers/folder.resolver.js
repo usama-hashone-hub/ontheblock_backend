@@ -8,7 +8,7 @@ const doc = async (document) => {
 const folderResolver = {
   Query: {
     folders: async (_, args, { req, res }) => {
-      const filter = pick(args.filters, ['name', 'inventory', 'added_by', 'createdAt', 'updatedAt']);
+      const filter = pick(args.filters, ['name', 'inventory', 'property', 'added_by', 'createdAt', 'updatedAt']);
       const options = pick(args.options, ['sortBy', 'limit', 'page']);
       return await folderService.queryFolders(filter, options);
     },
