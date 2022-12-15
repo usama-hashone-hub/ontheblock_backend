@@ -17,16 +17,11 @@ const { getPath, uploadImage } = require('./utils/cloudinary');
 const { userService, roomService, messageService } = require('./services');
 const { User } = require('./models');
 const pick = require('./utils/pick');
-const { Promise } = require('mongoose');
 const moment = require('moment');
 const { Room, Message } = require('./models');
-
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const can = require('./middlewares/auth');
-const { sendTaskNotificationUsingExpo } = require('./utils/cron');
-const { sendFireBAseNotifications } = require('./utils/firebaseNotifications');
-const { sendTestNotification } = require('./utils/expoNotifications');
+const { sendTaskNotificationUsingExpo, testCorn, testfunc, getTaskNotifications } = require('./utils/cron');
 
 const app = express();
 const http = require('http').Server(app);
@@ -79,6 +74,7 @@ app.get('/', (req, res, next) => {
 });
 
 sendTaskNotificationUsingExpo.start();
+// getTaskNotifications();
 // sendTestNotification();
 // v1 api routes
 app.use('/v1', routes);

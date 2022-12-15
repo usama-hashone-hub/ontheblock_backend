@@ -2,8 +2,9 @@ var cron = require('node-cron');
 const { Task } = require('../models');
 const { sendPushNotifications } = require('./expoNotifications');
 const { sendFireBAseNotifications } = require('./firebaseNotifications');
+const moment = require('moment');
 
-const sendTaskNotification = cron.schedule('* 12 * * *', async () => {
+const sendTaskNotification = cron.schedule('0 0 * * *', async () => {
   let curDate = moment().format();
   let nextweekDate = moment().add(7, 'days').format();
   let tasks = await Task.find({
@@ -36,7 +37,12 @@ const sendTaskNotification = cron.schedule('* 12 * * *', async () => {
   });
 });
 
-const sendTaskNotificationUsingExpo = cron.schedule('* 12 * * *', async () => {
+const sendTaskNotificationUsingExpo = cron.schedule('0 0 * * *', async () => {
+  let pushMessages = await getTaskNotifications();
+  await sendPushNotifications(pushMessages);
+});
+
+var getTaskNotifications = async () => {
   let curDate = moment().format();
   let nextweekDate = moment().add(7, 'days').format();
   let tasks = await Task.find({
@@ -48,7 +54,7 @@ const sendTaskNotificationUsingExpo = cron.schedule('* 12 * * *', async () => {
     .populate('added_by');
 
   let pushMessages = tasks.reduce((acc, curr) => {
-    let daysRemaning = moment(curr.schedule_date.diff(curDate, 'days'));
+    let daysRemaning = moment(curr.schedule_date).diff(curDate, 'days');
 
     let OneWeekRemaining = daysRemaning == 7 ? true : false;
     let ThreeDaysRemaining = daysRemaning == 3 ? true : false;
@@ -56,12 +62,21 @@ const sendTaskNotificationUsingExpo = cron.schedule('* 12 * * *', async () => {
     let TwelveHoursRemaining = daysRemaning == 0 ? true : false;
 
     if (OneWeekRemaining || ThreeDaysRemaining || OneDayRemaining || TwelveHoursRemaining) {
+      let title =
+        daysRemaning == 1
+          ? 'Task will be expire tomorrow'
+          : daysRemaning == 0
+          ? 'Task will be expire today'
+          : `Upcomming Task in will be expire in ${daysRemaning} days`;
+
       acc.push({
-        title: `Upcomming Task within ${daysRemaning} days`,
+        title: title,
+        subtitle: 'Task Reminder',
         body: curr.description,
         data: {
           id: curr._id,
         },
+        sound: 'default',
         to: curr.added_by.notificationToken,
       });
     }
@@ -69,10 +84,13 @@ const sendTaskNotificationUsingExpo = cron.schedule('* 12 * * *', async () => {
     return acc;
   }, []);
 
-  await sendPushNotifications(pushMessages);
-});
+  // console.log({ pushMessages });
+
+  return pushMessages;
+};
 
 module.exports = {
   sendTaskNotification,
   sendTaskNotificationUsingExpo,
+  getTaskNotifications,
 };
