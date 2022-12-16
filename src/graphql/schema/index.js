@@ -306,11 +306,11 @@ const typeDefs = gql`
   }
 
   input InputInventory {
-    name: String
+    name: String!
     description: String
-    images: [String]
-    type: ID
-    property: ID
+    images: [String]!
+    type: ID!
+    property: ID!
     brand: String
     model_no: String
     serail_no: String
