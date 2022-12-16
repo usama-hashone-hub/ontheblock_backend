@@ -59,7 +59,7 @@ const taskResolver = {
       await checkUser(context, 'getTasks');
       let currDate = moment().format();
 
-      const filter = { added_by: context.user._id, schedule_date: { $gte: currDate } };
+      const filter = { added_by: context.user._id, is_completed: false, schedule_date: { $gte: currDate } };
       const options = pick(args.options, ['sortBy', 'limit', 'page']);
       return await taskService.queryTasks(filter, options);
     },
