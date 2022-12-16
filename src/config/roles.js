@@ -12,6 +12,7 @@ const allRoles = {
     'getProperties',
     'getInventories',
     'getTasks',
+    'getFolders',
   ],
   admin: [
     'getMyProfile',

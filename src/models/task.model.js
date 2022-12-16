@@ -20,7 +20,6 @@ const taskSchema = mongoose.Schema(
     inventory: {
       type: mongoose.Schema.ObjectId,
       ref: 'Inventory',
-      required: true,
     },
     description: {
       type: String,
