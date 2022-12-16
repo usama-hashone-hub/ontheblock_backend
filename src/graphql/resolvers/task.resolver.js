@@ -3,6 +3,7 @@ const pick = require('../../utils/pick');
 const moment = require('moment');
 const { Task } = require('../../models');
 const mongoose = require('mongoose');
+const { checkUser } = require('../../utils/GraphqlAuth');
 
 const doc = async (document) => {
   return { ...document._doc };
@@ -10,8 +11,10 @@ const doc = async (document) => {
 
 const taskResolver = {
   Query: {
-    tasks: async (_, args, { req, res }) => {
-      const filter = pick(args.filters, [
+    tasks: async (_, args, context) => {
+      await checkUser(context, 'getTasks');
+      let added_by = context.user._id;
+      const filter = pick({ ...args.filters, added_by }, [
         '_id',
         'schedule_date',
         'is_completed',
@@ -52,10 +55,11 @@ const taskResolver = {
         ])
       );
     },
-    upcommingTasksList: async (_, args, { req, res }) => {
+    upcommingTasksList: async (_, args, context) => {
+      await checkUser(context, 'getTasks');
       let currDate = moment().format();
 
-      const filter = { schedule_date: { $gte: currDate } };
+      const filter = { added_by: context.user._id, schedule_date: { $gte: currDate } };
       const options = pick(args.options, ['sortBy', 'limit', 'page']);
       return await taskService.queryTasks(filter, options);
     },

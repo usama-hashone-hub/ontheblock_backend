@@ -1,4 +1,5 @@
 const { folderService } = require('../../services');
+const { checkUser } = require('../../utils/GraphqlAuth');
 const pick = require('../../utils/pick');
 
 const doc = async (document) => {
@@ -7,8 +8,17 @@ const doc = async (document) => {
 
 const folderResolver = {
   Query: {
-    folders: async (_, args, { req, res }) => {
-      const filter = pick(args.filters, ['name', 'inventory', 'property', 'added_by', 'createdAt', 'updatedAt']);
+    folders: async (_, args, context) => {
+      await checkUser(context, 'getFolders');
+      let added_by = context.user._id;
+      const filter = pick({ ...args.filters, added_by }, [
+        'name',
+        'inventory',
+        'property',
+        'added_by',
+        'createdAt',
+        'updatedAt',
+      ]);
       const options = pick(args.options, ['sortBy', 'limit', 'page']);
       return await folderService.queryFolders(filter, options);
     },

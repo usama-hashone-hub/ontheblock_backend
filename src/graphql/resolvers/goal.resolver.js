@@ -7,8 +7,9 @@ const doc = async (document) => {
 
 const goalResolver = {
   Query: {
-    goals: async (_, args, { req, res }) => {
-      const filter = pick(args.filters, ['name', 'createdAt', 'updatedAt']);
+    goals: async (_, args) => {
+      console.log({ ...args.filters, is_active: true });
+      const filter = pick({ ...args.filters, is_active: true }, ['name', 'createdAt', 'updatedAt', 'is_active']);
       const options = pick(args.options, ['sortBy', 'limit', 'page']);
       return await goalService.queryGoals(filter, options);
     },

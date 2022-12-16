@@ -1,4 +1,5 @@
 const { propertyService } = require('../../services');
+const { checkUser } = require('../../utils/GraphqlAuth');
 const pick = require('../../utils/pick');
 
 const doc = async (document) => {
@@ -7,8 +8,11 @@ const doc = async (document) => {
 
 const propertyResolver = {
   Query: {
-    properties: async (_, args, { req, res }) => {
-      const filter = pick(args.filters, [
+    properties: async (_, args, context) => {
+      await checkUser(context, 'getProperties');
+      let added_by = context.user._id;
+
+      const filter = pick({ ...args.filters, added_by }, [
         'name',
         'type',
         'bedrooms',

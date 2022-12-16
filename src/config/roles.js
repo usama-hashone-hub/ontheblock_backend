@@ -9,6 +9,9 @@ const allRoles = {
     'createOrder',
     'getProfile',
     'getInventoryByCategory',
+    'getProperties',
+    'getInventories',
+    'getTasks',
   ],
   admin: [
     'getMyProfile',

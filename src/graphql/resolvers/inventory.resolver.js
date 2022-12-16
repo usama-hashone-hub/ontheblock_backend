@@ -1,4 +1,5 @@
 const { inventoryService } = require('../../services');
+const { checkUser } = require('../../utils/GraphqlAuth');
 const pick = require('../../utils/pick');
 
 const doc = async (document) => {
@@ -7,8 +8,10 @@ const doc = async (document) => {
 
 const inventoryResolver = {
   Query: {
-    inventories: async (_, args, { req, res }) => {
-      const filter = pick(args.filters, [
+    inventories: async (_, args, context) => {
+      await checkUser(context, 'getInventories');
+      let added_by = context.user._id;
+      const filter = pick({ ...args.filters, added_by }, [
         'name',
         'createdAt',
         'updatedAt',
