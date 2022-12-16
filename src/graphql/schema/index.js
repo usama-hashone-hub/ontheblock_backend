@@ -494,6 +494,7 @@ const typeDefs = gql`
     schedule_date: GraphQLDate
     property: ID
     inventory: ID
+    is_completed: Boolean
     added_by: ID
     description: String
     get_notifications: Boolean

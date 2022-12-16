@@ -5495,10 +5495,10 @@
   "resolved" "https://registry.npmjs.org/ignore/-/ignore-5.2.0.tgz"
   "version" "5.2.0"
 
-"imagekit@^4.1.1":
-  "integrity" "sha512-pL0SWR8FXq8gtzyhWM19h8/Vjr6XNAbAO8YeiHinbs9b0KKNFhuDA5ehksqsPaMHAaB1MebUdoz77SwqCIwIoA=="
-  "resolved" "https://registry.npmjs.org/imagekit/-/imagekit-4.1.1.tgz"
-  "version" "4.1.1"
+"imagekit@^4.1.2":
+  "integrity" "sha512-9MCZ5NWfRCRtXqIb6qX0+rEfb7LcL4M9dyIIiK+4XFKl5dOO/V7FT/Rhgc8Q0lEntH74tVHKSY3J2Iph0FLjKg=="
+  "resolved" "https://registry.npmjs.org/imagekit/-/imagekit-4.1.2.tgz"
+  "version" "4.1.2"
   dependencies:
     "axios" "^0.27.2"
     "form-data" "^4.0.0"

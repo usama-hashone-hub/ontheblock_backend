@@ -68,6 +68,24 @@ passport.use('jwt', jwtStrategy);
 if (config.env === 'production') {
   app.use('/v1/auth', authLimiter);
 }
+// var ImageKit = require('imagekit');
+
+// var imagekit = new ImageKit({
+//   publicKey: 'public_9oA6a9dbCTuAWI1qrlnQcdi2h/U=',
+//   privateKey: 'private_uI05KYEBY48GyrXEh8UKe+CY5s8=',
+//   urlEndpoint: 'https://ik.imagekit.io/ak4gva2wf',
+// });
+
+// imagekit.upload(
+//   {
+//     file: '/home/hp/Downloads/bike.jpeg', //required
+//     fileName: 'testfileServerBike.png', //required
+//   },
+//   function (error, result) {
+//     if (error) console.log(error);
+//     else console.log(result);
+//   }
+// );
 
 app.get('/', (req, res, next) => {
   res.send({ message: 'Welcome to ontheblock rest APIs' });
