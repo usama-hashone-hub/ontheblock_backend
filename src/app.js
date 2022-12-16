@@ -70,7 +70,7 @@ if (config.env === 'production') {
 }
 
 app.get('/', (req, res, next) => {
-  res.send({ message: 'Welcome to youhook APIs' });
+  res.send({ message: 'Welcome to ontheblock rest APIs' });
 });
 
 sendTaskNotificationUsingExpo.start();
