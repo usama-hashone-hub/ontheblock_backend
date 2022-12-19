@@ -84,8 +84,8 @@ var getTaskNotifications = async () => {
     return acc;
   }, []);
 
-  // console.log({ pushMessages });
-
+  console.log({ pushMessages });
+  // await sendPushNotifications(pushMessages);
   return pushMessages;
 };
 

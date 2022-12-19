@@ -118,7 +118,14 @@ const authResolver = {
       return { ...(await doc(user)), ...token };
     },
     login: async (_, { email, password, notificationToken }, context) => {
-      const user = await authService.loginUserWithEmailAndPassword(email, password);
+      let user;
+
+      if (!isNaN(email)) {
+        user = await authService.loginUserWithPhoneAndPassword(email, password);
+      } else {
+        user = await authService.loginUserWithEmailAndPassword(email, password);
+      }
+
       await userService.updateUserById(user._id, { notificationToken: notificationToken });
       const token = await tokenService.generateAuthTokens(user, true);
       return { ...(await doc(user)), ...token };

@@ -3,11 +3,28 @@ const { Category } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createCategory = async (body) => {
-  return Category.create(body);
+  let cat = await Category.create(body);
+
+  if (body.parentCategory) {
+    await updateCategoryById(body.parentCategory, { $push: { subCategories: cat._id } });
+  }
+
+  return cat;
 };
 
 const queryCategories = async (filter, options) => {
-  const categories = await Category.paginate(filter, options);
+  options['populate'] = [
+    {
+      path: 'subCategories',
+      model: 'Category',
+      populate: {
+        path: 'subCategories',
+        model: 'Category',
+      },
+    },
+  ];
+
+  const categories = await Category.paginate({ ...filter, ...{ parentCategory: { $exists: false } } }, options);
   return categories;
 };
 

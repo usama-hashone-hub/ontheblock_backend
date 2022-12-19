@@ -110,6 +110,7 @@ const typeDefs = gql`
     name: String
     description: String
     image: String
+    subCategories: [Category]
     createdAt: GraphQLDateTime
     updatedAt: GraphQLDateTime
   }
@@ -126,6 +127,8 @@ const typeDefs = gql`
     name: String
     description: String
     image: String
+    parentCategory: ID
+    is_active: Boolean
   }
 
   input DeleteCategoryInput {

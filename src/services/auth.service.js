@@ -21,6 +21,15 @@ const loginUserWithEmailAndPassword = async (email, password) => {
   return user;
 };
 
+const loginUserWithPhoneAndPassword = async (phone, password) => {
+  const user = await userService.getUserByPhone(phone);
+  // console.log(await user.isPasswordMatch(password));
+  if (!user || !(await user.isPasswordMatch(password))) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect phone or password');
+  }
+  return user;
+};
+
 /**
  * Logout
  * @param {string} refreshToken
@@ -130,4 +139,5 @@ module.exports = {
   verifyEmail,
   verifyCode,
   changePassword,
+  loginUserWithPhoneAndPassword,
 };
