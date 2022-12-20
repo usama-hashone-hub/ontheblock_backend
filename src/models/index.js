@@ -11,3 +11,4 @@ module.exports.Inventory = require('./inventory.model');
 module.exports.Folder = require('./folder.model');
 module.exports.Handyman = require('./handyman.model');
 module.exports.Task = require('./task.model');
+module.exports.Notification = require('./notification.model');

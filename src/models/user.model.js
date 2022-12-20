@@ -67,6 +67,7 @@ const userSchema = mongoose.Schema(
     passwordResetExpireAt: Date,
     photo: {
       type: String,
+      unique: true,
     },
     socketId: {
       type: String,

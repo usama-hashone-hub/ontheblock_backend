@@ -5,6 +5,7 @@ const {
   emailService,
   phoneVerificationService,
   propertyService,
+  notificationService,
 } = require('../../services');
 const pick = require('../../utils/pick');
 const moment = require('moment');
@@ -39,7 +40,7 @@ const authResolver = {
         },
         {
           $group: {
-            _id: '$type',
+            _id: '$mainCatgeory',
             inventories: {
               $push: {
                 images: '$images',
@@ -68,7 +69,7 @@ const authResolver = {
         {
           $project: {
             inventories: {
-              $slice: ['$inventories', 0, 10],
+              $slice: ['$inventories', 0, 100],
             },
             category: '$category',
           },
@@ -101,6 +102,18 @@ const authResolver = {
 
       var authenticationParameters = imagekit.getAuthenticationParameters();
       return authenticationParameters;
+    },
+    notifications: async (_, args, context) => {
+      await checkUser(context, 'getNotifications');
+      let to = context.user._id;
+      const filter = pick({ ...args.filters, to }, ['task', 'seen', 'property', 'type', 'to']);
+      let options = pick(args.options, ['sortBy', 'limit', 'page']);
+      options['populate'] = [
+        { path: 'property', model: 'Property' },
+        { path: 'task', model: 'Task' },
+      ];
+      console.log(filter);
+      return await notificationService.queryNotifications(filter, options);
     },
   },
   Mutation: {
@@ -196,17 +209,20 @@ const authResolver = {
         result: true,
       };
     },
-    forgetPasswordChange: async (_, { token, password }, constext) => {
+    forgetPasswordChange: async (_, { token, password }, context) => {
       await authService.resetPassword(token, password);
       return {
         result: true,
       };
     },
-    resetPassword: async (_, { password, newPassword, email }, constext) => {
+    resetPassword: async (_, { password, newPassword, email }, context) => {
       await authService.changePassword(email, password, newPassword);
       return {
         result: true,
       };
+    },
+    updateNotification: async (_, { id, updateNotification }, context) => {
+      return await notificationService.updateNotificationById(id, updateNotification);
     },
   },
 };

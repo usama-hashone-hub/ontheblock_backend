@@ -14,4 +14,4 @@ module.exports.inventoryService = require('./inventory.service');
 module.exports.folderService = require('./folder.service');
 module.exports.fileService = require('./file.service');
 module.exports.handymanService = require('./handyman.service');
-module.exports.taskService = require('./task.service');
+module.exports.notificationService = require('./notification.service');

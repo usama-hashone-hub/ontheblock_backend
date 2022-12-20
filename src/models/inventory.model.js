@@ -19,6 +19,11 @@ const inventorySchema = mongoose.Schema(
       ref: 'Category',
       required: [true, 'Category is required'],
     },
+    mainCatgeory: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Category',
+      required: [true, 'Category is required'],
+    },
     property: {
       type: mongoose.Schema.ObjectId,
       ref: 'Property',

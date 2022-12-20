@@ -533,6 +533,39 @@ const typeDefs = gql`
     signature: String
   }
 
+  input updateNotification {
+    seen: Boolean
+  }
+
+  type notification {
+    title: String
+    subTitle: String
+    notification: String
+    property: Property
+    task: Task
+    image: String
+    type: String
+    to: String
+    seen: Boolean
+    createdAt: GraphQLDateTime
+    updatedAt: GraphQLDateTime
+  }
+
+  type notificationList {
+    results: [notification]
+    page: Int
+    limit: Int
+    totalPages: Int
+    totalResults: Int
+  }
+
+  input Notificationfilters {
+    property: ID
+    task: ID
+    to: String
+    seen: Boolean
+  }
+
   type Query {
     # getAllRiders: [User]
     # settings: [Setting]
@@ -550,6 +583,7 @@ const typeDefs = gql`
     upcommingTasksList(filters: Taskfilters, options: options): TasksList!
     getInventoryByCategory(propertyId: ID!): [InventoryGroupByCategory]
     getImageKitToken: getImageKitToken
+    notifications(filters: Notificationfilters, options: options): notificationList!
     # estates: [Estate]
     # customEstatesList: [Estate]
     # products: [Product]
@@ -620,6 +654,8 @@ const typeDefs = gql`
     addTask(inputTask: InputTask): Task
     deleteTask(deleteTaskInput: DeleteTaskInput): Task
     updateTask(id: ID!, updateTaskInput: InputTask): Task
+
+    updateNotification(id: ID!, updateNotification: updateNotification): notification
 
     # createSetting(settingInput: SettingInput): Setting
     # createTransaction(inputTransaction: InputTransaction): Transaction

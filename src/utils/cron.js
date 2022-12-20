@@ -3,6 +3,7 @@ const { Task } = require('../models');
 const { sendPushNotifications } = require('./expoNotifications');
 const { sendFireBAseNotifications } = require('./firebaseNotifications');
 const moment = require('moment');
+const { notificationService } = require('../services');
 
 const sendTaskNotification = cron.schedule('0 0 * * *', async () => {
   let curDate = moment().format();
@@ -85,8 +86,26 @@ var getTaskNotifications = async () => {
   }, []);
 
   console.log({ pushMessages });
-  // await sendPushNotifications(pushMessages);
-  return pushMessages;
+
+  let task;
+  let notify = pushMessages.map(async (msg) => {
+    task = tasks.find((t) => msg.data.id == t._id);
+    console.log(task);
+    return await notificationService.createNotification({
+      title: 'Task Reminder',
+      notification: msg.title,
+      property: task.property,
+      task: msg.data.id,
+      type: 'reminder',
+      to: task.added_by,
+    });
+  });
+
+  Promise.all(notify).then(async (res) => {
+    console.log({ res });
+    // await sendPushNotifications(pushMessages);
+    return pushMessages;
+  });
 };
 
 module.exports = {
