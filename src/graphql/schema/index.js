@@ -291,6 +291,7 @@ const typeDefs = gql`
     description: String
     images: [String]
     type: Category
+    mainCatgeory: Category
     brand: String
     model_no: String
     serail_no: String
@@ -313,6 +314,7 @@ const typeDefs = gql`
     description: String
     images: [String]!
     type: ID!
+    mainCatgeory: ID
     property: ID!
     brand: String
     model_no: String
