@@ -15,3 +15,4 @@ module.exports.folderService = require('./folder.service');
 module.exports.fileService = require('./file.service');
 module.exports.handymanService = require('./handyman.service');
 module.exports.notificationService = require('./notification.service');
+module.exports.taskService = require('./task.service');
