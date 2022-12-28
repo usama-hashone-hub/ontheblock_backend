@@ -372,7 +372,7 @@ const typeDefs = gql`
     name: String
     files: [ID]
     inventory: ID
-    property: ID!
+    property: ID
     added_by: ID
   }
 
