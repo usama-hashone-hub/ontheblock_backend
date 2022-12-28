@@ -187,6 +187,8 @@ const typeDefs = gql`
     name: String
     description: String
     image: String
+    is_default: Boolean
+    is_active: Boolean
     createdAt: GraphQLDateTime
     updatedAt: GraphQLDateTime
   }
@@ -203,6 +205,8 @@ const typeDefs = gql`
     name: String
     description: String
     image: String
+    is_default: Boolean
+    is_active: Boolean
   }
 
   input DeletePropertyTypeInput {
@@ -290,6 +294,7 @@ const typeDefs = gql`
     name: String
     description: String
     images: [String]
+    property: Property
     type: Category
     mainCatgeory: Category
     brand: String
@@ -315,7 +320,7 @@ const typeDefs = gql`
     images: [String]!
     type: ID!
     mainCatgeory: ID
-    property: ID!
+    property: ID
     brand: String
     model_no: String
     serail_no: String

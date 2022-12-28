@@ -16,6 +16,10 @@ const propertyTypeSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    is_default: {
+      type: Boolean,
+      default: false,
+    },
     is_active: {
       type: Boolean,
       default: true,
