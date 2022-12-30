@@ -8,7 +8,7 @@ const doc = async (document) => {
 const propertyUseResolver = {
   Query: {
     propertyUses: async (_, args, { req, res }) => {
-      const filter = pick(args.filters, ['name', 'is_default', 'createdAt', 'updatedAt']);
+      const filter = pick(args.filters, ['name', 'is_default', 'is_active', 'createdAt', 'updatedAt']);
       const options = pick(args.options, ['sortBy', 'limit', 'page']);
       return await propertyUseService.queryPropertyUses(filter, options);
     },

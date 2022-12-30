@@ -229,6 +229,8 @@ const typeDefs = gql`
     name: String
     createdAt: GraphQLDateTime
     updatedAt: GraphQLDateTime
+    is_default: Boolean
+    is_active: Boolean
   }
 
   # =========================================================================
@@ -270,6 +272,8 @@ const typeDefs = gql`
     name: String
     createdAt: GraphQLDateTime
     updatedAt: GraphQLDateTime
+    is_default: Boolean
+    is_active: Boolean
   }
 
   # =========================================================================
