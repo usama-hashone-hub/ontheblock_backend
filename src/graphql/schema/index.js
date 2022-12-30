@@ -40,6 +40,18 @@ const typeDefs = gql`
     property: InputProperty
   }
 
+  input GoogleInput {
+    googleData: String
+    userData: UserInput
+    property: InputProperty
+  }
+
+  input AppleInput {
+    appleData: String
+    userData: UserInput
+    property: InputProperty
+  }
+
   type ForgotPassword {
     result: Boolean!
   }
@@ -220,6 +232,47 @@ const typeDefs = gql`
   }
 
   # =========================================================================
+  # PropertyUse type and inputs
+  # =========================================================================
+
+  type PropertyUse {
+    _id: ID!
+    name: String
+    description: String
+    image: String
+    is_default: Boolean
+    is_active: Boolean
+    createdAt: GraphQLDateTime
+    updatedAt: GraphQLDateTime
+  }
+
+  type propertyUsesList {
+    results: [PropertyUse]
+    page: Int
+    limit: Int
+    totalPages: Int
+    totalResults: Int
+  }
+
+  input InputPropertyUse {
+    name: String
+    description: String
+    image: String
+    is_default: Boolean
+    is_active: Boolean
+  }
+
+  input DeletePropertyUseInput {
+    id: ID
+  }
+
+  input propertyUsefilters {
+    name: String
+    createdAt: GraphQLDateTime
+    updatedAt: GraphQLDateTime
+  }
+
+  # =========================================================================
   # Property type and inputs
   # =========================================================================
 
@@ -229,6 +282,7 @@ const typeDefs = gql`
     description: String
     images: [String]
     type: PropertyType
+    use: PropertyUse
     bedrooms: Int
     bathrooms: Int
     owned_years: Int
@@ -255,6 +309,7 @@ const typeDefs = gql`
     description: String
     images: [String]
     type: ID
+    use: ID
     bedrooms: Int
     bathrooms: Int
     owned_years: Int
@@ -272,6 +327,7 @@ const typeDefs = gql`
 
   input propertyfilters {
     type: ID
+    use: ID
     name: String
     bedrooms: Int
     bathrooms: Int
@@ -580,6 +636,7 @@ const typeDefs = gql`
     categories(filters: categoryfilters, options: options): CategoriesList!
     goals(filters: goalfilters, options: options): goalsList!
     propertyTypes(filters: propertyTypefilters, options: options): propertyTypesList!
+    propertyUses(filters: propertyUsefilters, options: options): propertyUsesList!
     properties(filters: propertyfilters, options: options): propertiesList!
     inventories(filters: Inventoryfilters, options: options): inventoriesList!
     folders(filters: Folderfilters, options: options): FoldersList!
@@ -614,6 +671,8 @@ const typeDefs = gql`
   type Mutation {
     login(email: String, password: String, notificationToken: String): AuthData!
     signup(userInput: UserInput): AuthData!
+    googleAuthentication(googleInput: GoogleInput): AuthData!
+    appleAuthentication(appleInput: AppleInput): AuthData!
     registerWithProperty(userInput: UserInput, propertyInput: InputProperty): AuthData!
 
     sendPhoneCode(phone: String): Phone
@@ -636,6 +695,10 @@ const typeDefs = gql`
     createPropertyType(inputPropertyType: InputPropertyType): PropertyType
     deletePropertyType(deletePropertyTypeInput: DeletePropertyTypeInput): PropertyType
     updatePropertyType(id: ID!, updatePropertyTypeInput: InputPropertyType): PropertyType
+
+    createPropertyUse(inputPropertyUse: InputPropertyUse): PropertyUse
+    deletePropertyUse(deletePropertyUseInput: DeletePropertyUseInput): PropertyUse
+    updatePropertyUse(id: ID!, updatePropertyUseInput: InputPropertyUse): PropertyUse
 
     createProperty(inputProperty: InputProperty): Property
     deleteProperty(deletePropertyInput: DeletePropertyInput): Property

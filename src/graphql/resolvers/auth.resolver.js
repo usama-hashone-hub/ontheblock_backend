@@ -9,14 +9,42 @@ const {
 } = require('../../services');
 const pick = require('../../utils/pick');
 const moment = require('moment');
-const { Inventory } = require('../../models');
+const { Inventory, User } = require('../../models');
 const { checkUser } = require('../../utils/GraphqlAuth');
 const ImageKit = require('imagekit');
 const mongoose = require('mongoose');
+const { OAuth2Client } = require('google-auth-library');
+const fs = require('fs');
+const path = require('path');
+const AppleAuth = require('apple-auth');
+const jwt = require('jsonwebtoken');
 
 const doc = async (user) => {
   return { ...user._doc };
 };
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+
+async function verifyGoogleToken(token) {
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+    return { payload: ticket.getPayload() };
+  } catch (error) {
+    return { error: 'Invalid user detected. Please try again' };
+  }
+}
+
+const applecConfig = fs.readFileSync(path.join(__dirname, '../../', '/config/appleLogin/', 'config.json'));
+
+let auth = new AppleAuth(
+  applecConfig,
+  path.join(__dirname, '../../', '/config/appleLogin/', 'AuthKey.p8').toString(),
+  'text'
+);
 
 const authResolver = {
   Query: {
@@ -117,6 +145,46 @@ const authResolver = {
     },
   },
   Mutation: {
+    googleAuthentication: async (_, { googleData, property, userData }, context) => {
+      googleData = JSON.parse(googleData);
+      const verificationResponse = await verifyGoogleToken(googleData);
+
+      if (verificationResponse.error) {
+        throw new Error({
+          message: verificationResponse.error,
+        });
+      }
+
+      const profileData = verificationResponse?.payload;
+      let user;
+
+      if (profileData?.email && (await User.isEmailTaken(profileData.email))) {
+        user = await userService.getUserByEmail(profileData?.email);
+      } else {
+        user = await userService.createUser({ ...profileData, ...userData, auth: 'google' });
+        await propertyService.createProperty({ property, added_by: user._id });
+      }
+
+      const token = await tokenService.generateAuthTokens(user, true);
+      return { ...(await doc(user)), ...token };
+    },
+    appleAuthentication: async (_, { appleData, property, userData }, context) => {
+      appleData = JSON.parse(appleData);
+      const response = await auth.accessToken(appleData.code);
+      const idToken = jwt.decode(response.id_token);
+
+      const user = {};
+
+      if (idToken?.email && (await User.isEmailTaken(idToken.email))) {
+        user = await userService.getUserByEmail(idToken?.email);
+      } else {
+        user = await userService.createUser({ ...idToken, ...userData, auth: 'apple' });
+        await propertyService.createProperty({ property, added_by: user._id });
+      }
+
+      const token = await tokenService.generateAuthTokens(user, true);
+      return { ...(await doc(user)), ...token };
+    },
     signup: async (_, args, context) => {
       const user = await userService.createUser(args.userInput);
       const token = await tokenService.generateAuthTokens(user, true);

@@ -20,10 +20,10 @@ const defaultRoutes = [
     path: '/admin',
     route: adminRoute,
   },
-  {
-    path: '/files',
-    route: s3Route,
-  },
+  // {
+  //   path: '/files',
+  //   route: s3Route,
+  // },
 ];
 
 const devRoutes = [

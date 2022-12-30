@@ -20,6 +20,10 @@ const propertySchema = mongoose.Schema(
       ref: 'PropertyType',
       required: [true, 'Property type is required'],
     },
+    use: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'PropertyUse',
+    },
     added_by: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',

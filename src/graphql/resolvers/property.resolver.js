@@ -15,6 +15,7 @@ const propertyResolver = {
       const filter = pick({ ...args.filters, added_by }, [
         'name',
         'type',
+        'use',
         'bedrooms',
         'bathrooms',
         'owned_years',

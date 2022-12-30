@@ -5,6 +5,6 @@ const { readFile, deleteFile } = require('../../utils/s3');
 
 const router = express.Router();
 
-router.route('/:key').get(readFile).delete(deleteFile);
+// router.route('/:key').get(readFile).delete(deleteFile);
 
 module.exports = router;

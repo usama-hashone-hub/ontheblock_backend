@@ -7,6 +7,7 @@ const { handymanResolver } = require('./handyman.resolver');
 const { inventoryResolver } = require('./inventory.resolver');
 const { propertyResolver } = require('./property.resolver');
 const { propertyTypeResolver } = require('./propertytype.resolver');
+const { propertyUseResolver } = require('./propertyuse.resolver');
 const { taskResolver } = require('./task.resolver');
 
 const rootResolver = {
@@ -21,6 +22,7 @@ const rootResolver = {
     ...inventoryResolver.Query,
     ...propertyResolver.Query,
     ...taskResolver.Query,
+    ...propertyUseResolver.Query,
   },
   Mutation: {
     ...authResolver.Mutation,
@@ -33,6 +35,7 @@ const rootResolver = {
     ...inventoryResolver.Mutation,
     ...propertyResolver.Mutation,
     ...taskResolver.Mutation,
+    ...propertyUseResolver.Mutation,
   },
 };
 

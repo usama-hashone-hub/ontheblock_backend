@@ -10,6 +10,7 @@ module.exports.roomService = require('./room.service');
 module.exports.categoryService = require('./category.service');
 module.exports.goalService = require('./goal.service');
 module.exports.propertyTypeService = require('./propertyType.service');
+module.exports.propertyUseService = require('./propertyUse.service');
 module.exports.inventoryService = require('./inventory.service');
 module.exports.folderService = require('./folder.service');
 module.exports.fileService = require('./file.service');

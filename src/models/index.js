@@ -7,6 +7,7 @@ module.exports.Room = require('./room.model');
 module.exports.Category = require('./category.model');
 module.exports.Goal = require('./goal.model');
 module.exports.PropertyType = require('./propertyType.model');
+module.exports.PropertyUse = require('./propertyUse.model');
 module.exports.Inventory = require('./inventory.model');
 module.exports.Folder = require('./folder.model');
 module.exports.Handyman = require('./handyman.model');

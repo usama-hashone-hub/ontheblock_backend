@@ -58,6 +58,11 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    auth: {
+      type: String,
+      enum: ['email', 'google', 'apple'],
+      default: 'email',
+    },
     verificationSid: String,
     isEmailVerified: {
       type: Boolean,
