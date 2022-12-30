@@ -591,7 +591,7 @@ const typeDefs = gql`
   type InventoryGroupByCategory {
     _id: ID
     inventories: [Inventory]
-    category: Category
+    mainCatgeory: Category
   }
 
   type getImageKitToken {

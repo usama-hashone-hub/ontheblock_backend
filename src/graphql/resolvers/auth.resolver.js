@@ -67,6 +67,19 @@ const authResolver = {
           },
         },
         {
+          $lookup: {
+            from: 'categories',
+            localField: 'type',
+            foreignField: '_id',
+            as: 'type',
+          },
+        },
+        {
+          $unwind: {
+            path: '$type',
+          },
+        },
+        {
           $group: {
             _id: '$mainCatgeory',
             inventories: {
@@ -77,6 +90,8 @@ const authResolver = {
                 brand: '$brand',
                 model_no: '$model_no',
                 serail_no: '$serail_no',
+                mainCatgeory: '$mainCatgeory',
+                type: '$type',
               },
             },
           },
@@ -86,12 +101,12 @@ const authResolver = {
             from: 'categories',
             localField: '_id',
             foreignField: '_id',
-            as: 'category',
+            as: 'mainCatgeory',
           },
         },
         {
           $unwind: {
-            path: '$category',
+            path: '$mainCatgeory',
           },
         },
         {
@@ -99,7 +114,7 @@ const authResolver = {
             inventories: {
               $slice: ['$inventories', 0, 100],
             },
-            category: '$category',
+            mainCatgeory: '$mainCatgeory',
           },
         },
       ]);
