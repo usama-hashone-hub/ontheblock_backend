@@ -7,11 +7,9 @@ const authToken = config.twilio.authToken;
 const client = require('twilio')(accountSid, authToken);
 
 const sendVerificationMessage = async (number, email = undefined) => {
-  if (email != undefined) {
-    let user = await userService.getUserByEmail(email);
-    if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found with this email');
-    }
+  let user = await userService.getUserByPhone(number);
+  if (!user) {
+    throw new Error('User not found with this number');
   }
   await client.verify.v2
     .services(config.twilio.serviceSid)
@@ -38,6 +36,10 @@ const verifyMessageCode = async (code, email) => {
 };
 
 const verifyMessageCodeGraphQl = async (code, phone) => {
+  let user = await userService.getUserByPhone(phone);
+  if (!user) {
+    throw new Error('User not found with this number');
+  }
   let verificationResult = await client.verify.v2
     .services(config.twilio.serviceSid)
     .verificationChecks.create({ code, to: phone });
