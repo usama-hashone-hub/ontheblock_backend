@@ -72,6 +72,7 @@ const typeDefs = gql`
     address: String
     photo: String
     notificationToken: String
+    phone: String
   }
 
   input UserInput {
@@ -122,6 +123,7 @@ const typeDefs = gql`
     name: String
     description: String
     image: String
+    parentCategory: Category
     subCategories: [Category]
     createdAt: GraphQLDateTime
     updatedAt: GraphQLDateTime
@@ -594,6 +596,12 @@ const typeDefs = gql`
     mainCatgeory: Category
   }
 
+  type getInventoryMainCategoryAndChildCategory {
+    _id: ID
+    subCategories: [Category]
+    mainCatgeory: Category
+  }
+
   type getImageKitToken {
     token: String
     expire: String
@@ -650,6 +658,7 @@ const typeDefs = gql`
     monthlyTasksList(userId: ID!, month: String!): [Task]
     upcommingTasksList(filters: Taskfilters, options: options): TasksList!
     getInventoryByCategory(propertyId: ID!): [InventoryGroupByCategory]
+    getInventoryMainCategoryAndChildCategory(propertyId: ID!): [getInventoryMainCategoryAndChildCategory]
     getImageKitToken: getImageKitToken
     notifications(filters: Notificationfilters, options: options): notificationList!
     # estates: [Estate]

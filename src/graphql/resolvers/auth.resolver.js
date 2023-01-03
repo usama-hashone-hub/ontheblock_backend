@@ -121,6 +121,60 @@ const authResolver = {
 
       return data;
     },
+    getInventoryMainCategoryAndChildCategory: async (_, args, context) => {
+      await checkUser(context, 'getInventoryMainCategoryAndChildCategory');
+      console.log(context.user._id, args.propertyId);
+
+      let data = await Inventory.aggregate([
+        {
+          $match: {
+            property: mongoose.Types.ObjectId(args.propertyId),
+            added_by: mongoose.Types.ObjectId(context.user._id),
+          },
+        },
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'type',
+            foreignField: '_id',
+            as: 'type',
+          },
+        },
+        {
+          $unwind: {
+            path: '$type',
+          },
+        },
+        {
+          $group: {
+            _id: '$mainCatgeory',
+            subCategories: {
+              $addToSet: {
+                _id: '$type._id',
+                name: '$type.name',
+                image: '$type.image',
+                parentCategory: '$type.parentCategory',
+              },
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: 'categories',
+            localField: '_id',
+            foreignField: '_id',
+            as: 'mainCatgeory',
+          },
+        },
+        {
+          $unwind: {
+            path: '$mainCatgeory',
+          },
+        },
+      ]);
+
+      return data;
+    },
     users: async (_, args, context) => {
       const filter = pick(args.filters, [
         'role',
@@ -231,6 +285,11 @@ const authResolver = {
       if (!context.user) {
         throw new Error('Unauthenticated!');
       }
+
+      if (Object.hasOwn(args.updateUserInput, 'phone') && args.updateUserInput?.phone != '') {
+        args.updateUserInput['phoneVerified'] = false;
+      }
+
       let user = await userService.updateUserById(context.user._id, args.updateUserInput);
       return await doc(user);
     },

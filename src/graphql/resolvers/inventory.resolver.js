@@ -24,10 +24,11 @@ const inventoryResolver = {
         'added_by',
       ]);
       let options = pick(args.options, ['sortBy', 'limit', 'page']);
-      // options['populate'] = [
-      //   { path: 'added_by', model: 'User' },
-      //   { path: 'type', model: 'Category' },
-      // ];
+      options['populate'] = [
+        { path: 'added_by', model: 'User' },
+        { path: 'type', model: 'Category' },
+        { path: 'property', model: 'Property' },
+      ];
       return await inventoryService.queryInventories(filter, options);
     },
   },

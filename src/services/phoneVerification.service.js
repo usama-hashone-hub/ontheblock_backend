@@ -45,6 +45,7 @@ const verifyMessageCodeGraphQl = async (code, phone) => {
     .verificationChecks.create({ code, to: phone });
 
   if (verificationResult.status === 'approved') {
+    await userService.updateUserById(user._id, { phoneVerified: true });
     return true;
   }
 

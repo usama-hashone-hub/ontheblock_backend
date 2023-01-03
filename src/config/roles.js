@@ -9,6 +9,7 @@ const allRoles = {
     'createOrder',
     'getProfile',
     'getInventoryByCategory',
+    'getInventoryMainCategoryAndChildCategory',
     'getProperties',
     'getInventories',
     'getTasks',
