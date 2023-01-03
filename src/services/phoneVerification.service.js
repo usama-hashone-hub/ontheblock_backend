@@ -32,16 +32,11 @@ const verifyMessageCode = async (code, email) => {
 };
 
 const verifyMessageCodeGraphQl = async (code, phone) => {
-  let user = await userService.getUserByPhone(phone);
-  if (!user) {
-    throw new Error('User not found with this number');
-  }
   let verificationResult = await client.verify.v2
     .services(config.twilio.serviceSid)
     .verificationChecks.create({ code, to: phone });
 
   if (verificationResult.status === 'approved') {
-    await userService.updateUserById(user._id, { phoneVerified: true });
     return true;
   }
 
