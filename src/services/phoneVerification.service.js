@@ -7,10 +7,6 @@ const authToken = config.twilio.authToken;
 const client = require('twilio')(accountSid, authToken);
 
 const sendVerificationMessage = async (number, email = undefined) => {
-  let user = await userService.getUserByPhone(number);
-  if (!user) {
-    throw new Error('User not found with this number');
-  }
   await client.verify.v2
     .services(config.twilio.serviceSid)
     .verifications.create({ to: number, channel: 'sms' })
