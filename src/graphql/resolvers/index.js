@@ -1,3 +1,4 @@
+const { adminNotificationResolver } = require('./adminNotification.resolver');
 const { authResolver } = require('./auth.resolver');
 const { categoryResolver } = require('./category.resolver');
 const { fileResolver } = require('./file.resolver');
@@ -23,6 +24,7 @@ const rootResolver = {
     ...propertyResolver.Query,
     ...taskResolver.Query,
     ...propertyUseResolver.Query,
+    ...adminNotificationResolver.Query,
   },
   Mutation: {
     ...authResolver.Mutation,
@@ -36,6 +38,7 @@ const rootResolver = {
     ...propertyResolver.Mutation,
     ...taskResolver.Mutation,
     ...propertyUseResolver.Mutation,
+    ...adminNotificationResolver.Mutation,
   },
 };
 

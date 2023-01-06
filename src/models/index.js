@@ -13,3 +13,4 @@ module.exports.Folder = require('./folder.model');
 module.exports.Handyman = require('./handyman.model');
 module.exports.Task = require('./task.model');
 module.exports.Notification = require('./notification.model');
+module.exports.AdminNotification = require('./adminNotification.model');

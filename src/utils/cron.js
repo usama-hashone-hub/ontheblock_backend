@@ -1,5 +1,5 @@
 var cron = require('node-cron');
-const { Task } = require('../models');
+const { Task, AdminNotification, User } = require('../models');
 const { sendPushNotifications } = require('./expoNotifications');
 const { sendFireBAseNotifications } = require('./firebaseNotifications');
 const moment = require('moment');
@@ -85,8 +85,6 @@ var getTaskNotifications = async () => {
     return acc;
   }, []);
 
-  console.log({ pushMessages });
-
   let task;
   let notify = pushMessages.map(async (msg) => {
     task = tasks.find((t) => msg.data.id == t._id);
@@ -108,8 +106,36 @@ var getTaskNotifications = async () => {
   });
 };
 
+const sendAdminNotifications = cron.schedule('0 0 * * *', async () => {
+  let pushMessages = await getAdminNotifications();
+  await sendPushNotifications(pushMessages);
+});
+
+var getAdminNotifications = async () => {
+  let curMonth = moment().format('MMMM');
+  const notifications = await AdminNotification.find({ month: curMonth });
+  const users = await User.find({ is_active: true, notificationToken: { $regex: '.*ExponentPushToken.*' } });
+  let tokens = users.reduce((acc, curr) => {
+    acc.push(curr.notificationToken);
+    return acc;
+  }, []);
+  var pushMessages = [];
+  notifications.map((n) => {
+    pushMessages.push({
+      title: n.title,
+      body: n.description,
+      data: {},
+      sound: 'default',
+      to: tokens,
+    });
+  });
+  return pushMessages;
+};
+
 module.exports = {
   sendTaskNotification,
   sendTaskNotificationUsingExpo,
   getTaskNotifications,
+  getAdminNotifications,
+  sendAdminNotifications,
 };

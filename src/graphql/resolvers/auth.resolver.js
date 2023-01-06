@@ -133,6 +133,11 @@ const authResolver = {
           },
         },
         {
+          $sort: {
+            name: 1,
+          },
+        },
+        {
           $lookup: {
             from: 'categories',
             localField: 'type',

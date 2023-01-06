@@ -21,7 +21,14 @@ const moment = require('moment');
 const { Room, Message } = require('./models');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { sendTaskNotificationUsingExpo, testCorn, testfunc, getTaskNotifications } = require('./utils/cron');
+const {
+  sendTaskNotificationUsingExpo,
+  testCorn,
+  testfunc,
+  getTaskNotifications,
+  getAdminNotifications,
+  sendAdminNotifications,
+} = require('./utils/cron');
 const fs = require('fs');
 const path = require('path');
 
@@ -94,6 +101,7 @@ app.get('/', (req, res, next) => {
 });
 
 sendTaskNotificationUsingExpo.start();
+sendAdminNotifications.start();
 // getTaskNotifications();
 // sendTestNotification();
 // v1 api routes

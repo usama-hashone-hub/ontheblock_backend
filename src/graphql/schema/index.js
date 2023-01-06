@@ -641,6 +641,36 @@ const typeDefs = gql`
     seen: Boolean
   }
 
+  # ===========================================================================
+
+  input InputAdminNotification {
+    month: String
+    title: String
+    description: String
+    is_active: Boolean
+  }
+
+  type adminNotification {
+    month: String
+    title: String
+    description: String
+    is_active: Boolean
+    createdAt: GraphQLDateTime
+    updatedAt: GraphQLDateTime
+  }
+
+  type adminNotificationList {
+    results: [adminNotification]
+    page: Int
+    limit: Int
+    totalPages: Int
+    totalResults: Int
+  }
+
+  input AdminNotificationfilters {
+    month: String
+  }
+
   type Query {
     # getAllRiders: [User]
     # settings: [Setting]
@@ -661,24 +691,9 @@ const typeDefs = gql`
     getInventoryMainCategoryAndChildCategory(propertyId: ID!): [getInventoryMainCategoryAndChildCategory]
     getImageKitToken: getImageKitToken
     notifications(filters: Notificationfilters, options: options): notificationList!
-    # estates: [Estate]
-    # customEstatesList: [Estate]
-    # products: [Product]
-    # allproducts: [Product]
-    # orders: [Order]
-    # transactions: [Transaction]
-    # getTotlaTransactions: [Transaction]
-    # getRiderOrders: [Order]
-    # allOrders: [Order]
-    # getRiderOrdersHiatory: [Order]
-    # getRiderCurrentOrders: [Order]
-    # completedOrders: [Order]
+    adminNotifications(filters: AdminNotificationfilters, options: options): adminNotificationList!
+
     profile: User
-    # configuration: Configuration!
-    # users(page: Int): [User!]
-    # getUserByType(role: String): [User]
-    # checkStripeId(id: String): Boolean!
-    # getUserStripeCards(id: String): [stripeCardinfo]
   }
 
   type Mutation {
@@ -740,20 +755,9 @@ const typeDefs = gql`
 
     updateNotification(id: ID!, updateNotification: updateNotification): notification
 
-    # createSetting(settingInput: SettingInput): Setting
-    # createTransaction(inputTransaction: InputTransaction): Transaction
-    # deleteTransaction(deleteTransactionInput: DeleteTransactionInput): Transaction
-    # placeOrder(inputOrder: InputOrder): Order
-    # updateOrderStatus(updateOrderStatusInput: UpdateOrderStatusInput): Order
-    # assignOrderToRider(assignOrderStatusInput: AssignOrderStatusInput): Order
-    # createEstate(inputEstate: InputEstate): Estate
-    # createCustomEstate(inputCustomEstate: InputCustomEstate): customEstate
-    # editEstate(inputEditEstate: InputEditEstate): Estate
-    # rateRider(inputRateRider: InputRateRider): Rate
-    # createProduct(inputProduct: InputProduct): Product
-    # editProduct(inputEditProduct: InputEditProduct): Product
-    # deleteEstate(deleteEstateInput: DeleteEstateInput): Estate
-    # deleteProduct(deleteProductInput: DeleteProductInput): Product
+    addAdminNotification(inputAdminNotification: InputAdminNotification): adminNotification
+    deleteAdminNotification(id: ID!): adminNotification
+    updateAdminNotification(id: ID!, updateAdminNotificationInput: InputAdminNotification): adminNotification
   }
 `;
 module.exports = typeDefs;
